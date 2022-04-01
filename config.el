@@ -93,13 +93,23 @@
 ;;                           (require 'lsp-python-ms)
 ;;                           (lsp))))  ; or lsp-deferred
 
+;; LSP
 (use-package eglot
   :ensure t)
 
-(add-to-list 'eglot-server-programs '(python-mode . ("python-language-server" "--args")))
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'html-mode-hook 'eglot-ensure)
+(add-hook 'typescript-mode-hook 'eglot-ensure)
+(add-hook 'javascript-mode-hook 'eglot-ensure)
 
 (use-package coffee-mode
   :ensure t)
+
+(use-package sws-mode
+  :ensure t)
+(use-package stylus-mode
+  :ensure t
+  :requires sws-mode)
 
 (use-package magit
   :ensure t
@@ -115,7 +125,6 @@
                          (memq (with-current-buffer buffer major-mode)
                                '(magit-process-mode
                                  magit-revision-mode
-                                 magit-diff-mode
                                  magit-stash-mode
                                  magit-status-mode)))
                     nil
@@ -179,9 +188,10 @@
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
 )
 
-;;; org mode theme
+;;; org mode
 (straight-use-package '(org-modern :host github :repo "minad/org-modern"))
 (add-hook 'org-mode-hook #'org-modern-mode)
+(setq org-startup-folded nil)
 
 ;;; snippets
 (use-package yasnippet
@@ -312,3 +322,6 @@
   ;;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
 )
+
+(setq scroll-margin 8)
+(setq evil-move-cursor-back nil)
