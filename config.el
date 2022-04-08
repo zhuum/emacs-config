@@ -325,3 +325,5 @@
 
 (setq scroll-margin 8)
 (setq evil-move-cursor-back nil)
+
+(setq electric-pair-mode nil)
