@@ -68,6 +68,7 @@
 (define-key vertico-map (kbd "C-f") 'vertico-exit)
 
 (define-key evil-motion-state-map (kbd "C-f") nil)
+(define-key global-map (kbd "C-f") nil)
 
 (define-key corfu-map (kbd "C-j") 'corfu-next)
 (define-key corfu-map (kbd "C-k") 'corfu-previous)
