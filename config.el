@@ -27,6 +27,20 @@
 ;;; org mode
 (require 'crafted-org)         ; org-appear, clickable hyperlinks etc.
 
+(use-package org
+  :config
+  (setq org-log-done 'time)
+  (setq org-agenda-files '("~/org/tasks.org")))
+
+;;; org journal
+(crafted-package-install-package 'org-journal)
+(use-package org-journal
+  :ensure t
+  :defer t
+  :config
+  (setq org-journal-file-type 'yearly)
+  (setq org-journal-dir "~/org/journal/"))
+
 ;;; project
 (require 'crafted-project)     ; built-in alternative to projectile
 
@@ -69,6 +83,8 @@
 
 (define-key evil-motion-state-map (kbd "C-f") nil)
 (define-key global-map (kbd "C-f") nil)
+;; disable :q from closing stuff
+(evil-ex-define-cmd "q" nil)
 
 (define-key corfu-map (kbd "C-j") 'corfu-next)
 (define-key corfu-map (kbd "C-k") 'corfu-previous)
