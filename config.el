@@ -30,13 +30,23 @@
 (use-package org
   :config
   (setq org-log-done 'time)
-  (setq org-agenda-files '("~/org/tasks.org")))
+  (setq org-agenda-files '("~/org/tasks.org"))
+  (setq org-agenda-start-with-log-mode t)
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t)
+  (setq org-refile-targets
+        '(("archive.org" :maxlevel . 1)
+          ("tasks.org" :maxlevel . 1)))
+
+  (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
 ;;; org journal
 (crafted-package-install-package 'org-journal)
 (use-package org-journal
   :ensure t
   :defer t
+  :init
+  (setq org-journal-prefix-key "C-c j ")
   :config
   (setq org-journal-file-type 'yearly)
   (setq org-journal-dir "~/org/journal/"))
