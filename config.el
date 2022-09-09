@@ -7,11 +7,12 @@
 
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq-default scroll-margin 8)
+(setq scroll-margin 8)
 
 (global-undo-tree-mode)
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.undo.d/")))
+(setq backup-directory-alist '(("." . "~/.emacs.backups")))
 
 ;;; UI
 (require 'crafted-ui)          ; Better UI experience (modeline etc.)
@@ -37,7 +38,6 @@
   (setq org-refile-targets
         '(("archive.org" :maxlevel . 1)
           ("tasks.org" :maxlevel . 1)))
-
   (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
 ;;; org journal
@@ -55,16 +55,37 @@
 (require 'crafted-project)     ; built-in alternative to projectile
 
 ;;; IDE
+
 (require 'crafted-ide)
-(crafted-package-install-package 'typescript-mode)
+
+;; Python
 (crafted-package-install-package 'python-black)
 (use-package python-black
   :demand t
   :after python
   :hook (python-mode . python-black-on-save-mode-enable-dwim))
 
+;; YAML
 (crafted-package-install-package 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(use-package yaml-mode
+  :mode "\\.yaml\\'" "\\.yml\\'")
+
+;;(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+
+;; Vue
+(crafted-package-install-package 'vue-mode)
+(use-package vue-mode
+  :mode "\\.vue\\'"
+  :hook (vue-mode . lsp-deferred))
+
+;; typescript
+(crafted-package-install-package 'typescript-mode)
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred))
+;  :config
+;  (setq typescript-indent-level 2)
+
 
 ;;; Shells
 (crafted-package-install-package 'vterm)
