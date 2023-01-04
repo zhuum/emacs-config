@@ -7,12 +7,17 @@
 
 (setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq scroll-margin 8)
 
+
+;; undo
+(setq evil-undo-system 'undo-tree)
 (global-undo-tree-mode)
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.undo.d/")))
 (setq backup-directory-alist '(("." . "~/.emacs.backups")))
+(define-key corfu-map (kbd "C-j") 'corfu-next)
+(define-key evil-normal-state-map "u" 'undo-tree-undo)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 
 ;;; UI
 (require 'crafted-ui)          ; Better UI experience (modeline etc.)
@@ -59,11 +64,7 @@
 (require 'crafted-ide)
 
 ;; Python
-(crafted-package-install-package 'python-black)
-(use-package python-black
-  :demand t
-  :after python
-  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+(require 'crafted-python)
 
 ;; YAML
 (crafted-package-install-package 'yaml-mode)
@@ -76,15 +77,17 @@
 (crafted-package-install-package 'vue-mode)
 (use-package vue-mode
   :mode "\\.vue\\'"
-  :hook (vue-mode . lsp-deferred))
+  :hook (vue-mode . lsp-deferred)
+  :config
+  (setq vue-indent-level 2))
 
 ;; typescript
 (crafted-package-install-package 'typescript-mode)
 (use-package typescript-mode
   :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred))
-;  :config
-;  (setq typescript-indent-level 2)
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
 
 
 ;;; Shells
@@ -94,10 +97,6 @@
   :demand t)
 (with-eval-after-load 'evil
   (advice-add 'evil-collection-vterm-insert :before #'vterm-reset-cursor-point))
-
-;; not sure if needed
-;; (add-hook 'python-mode-hook 'eglot-ensure)
-;; (add-hook 'typescript-mode-hook 'eglot-ensure)
 
 
 ;;; notes
@@ -141,16 +140,6 @@
  '((restclient . t)))
 
 
-;;(use-package coffee-mode
-;;  :ensure t)
-
-;;(use-package sws-mode
-;;  :ensure t)
-
-;;(use-package stylus-mode
-;;  :ensure t
-;;  :requires sws-mode)
-
 (use-package magit
   :ensure t
   :init
@@ -161,3 +150,9 @@
 (crafted-package-install-package 'minions)
 (use-package minions
   :config (minions-mode 1))
+
+
+(setq scroll-margin 8)
+
+(global-display-line-numbers-mode)
+(setq-default display-line-numbers-type 'relative)
