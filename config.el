@@ -10,14 +10,10 @@
 
 
 ;; undo
-(setq evil-undo-system 'undo-tree)
 (global-undo-tree-mode)
 (setq undo-tree-auto-save-history t)
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.undo.d/")))
 (setq backup-directory-alist '(("." . "~/.emacs.backups")))
-(define-key corfu-map (kbd "C-j") 'corfu-next)
-(define-key evil-normal-state-map "u" 'undo-tree-undo)
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 
 ;;; UI
 (require 'crafted-ui)          ; Better UI experience (modeline etc.)
@@ -60,7 +56,6 @@
 (require 'crafted-project)     ; built-in alternative to projectile
 
 ;;; IDE
-
 (require 'crafted-ide)
 
 ;; Python
@@ -106,12 +101,19 @@
 
 ;; keybinds
 
+(setq evil-undo-system 'undo-tree)
+(define-key evil-normal-state-map "u" 'undo-tree-undo)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+
 (custom-set-variables '(evil-want-C-u-scroll t)
                       '(crafted-evil-discourage-arrow-keys t))
 
 (define-key vertico-map (kbd "C-f") 'vertico-exit)
 
-(define-key evil-motion-state-map (kbd "C-f") nil)
+(with-val-after-load 'evil-maps
+                     (define-key evil-motion-state-map (kbd "C-f") nil)
+                     (define-key evil-motion-state-map (kbd "RET") nil))
+
 (define-key global-map (kbd "C-f") nil)
 ;; disable :q from closing stuff
 (evil-ex-define-cmd "q" nil)
@@ -129,6 +131,8 @@
 (global-set-key (kbd "C-M-k") 'kill-current-buffer)
 (global-set-key (kbd "C-M-r") 'consult-ripgrep)
 (global-set-key (kbd "M-/") 'evilnc-comment-or-uncomment-lines)
+
+;; (global-set-key (kbd "C-w z") 'maximize-window)
 
 ;; modules
 ;; rest client
